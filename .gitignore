@@ -65,7 +65,7 @@ Temporary Items
 .history/
 
 # 项目开发配置
-node_modules
-dist
+node_modules/
+dist/
 yarn-error.log
-.idea
+.idea/

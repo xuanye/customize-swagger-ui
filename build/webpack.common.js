@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const theme = require('./theme');
 const path = require('path');
@@ -8,6 +9,9 @@ module.exports = {
         app: './src/index.js',
     },
     plugins: [
+        new CopyWebpackPlugin({
+            patterns: [{ from: path.resolve(__dirname, '../public/static'), to: './' }],
+        }),
         new HtmlWebpackPlugin({
             title: 'Production',
             template: path.resolve(__dirname, '../public/index.html'),
