@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Tabs, Tag } from 'antd';
+import { Layout, Tabs, Tag, Space } from 'antd';
 
 import SideMenu from './components/SiderMenu';
 import MethodDetail from './components/MethodDetail';
@@ -62,7 +62,10 @@ const App = () => {
     return (
         <Layout>
             <Header className='header'>
-                <div className='AppName'>{swagger.info.title}</div>
+                <Space>
+                    <span className='appName'>{swagger.info.title}</span>
+                    <Tag color='cyan'>{swagger.info.version || '1.0.0'}</Tag>
+                </Space>
             </Header>
             <Layout>
                 <Sider width={250} className='site-layout-background'>
@@ -97,11 +100,11 @@ const getMethodColor = method => {
         case 'get':
             return '#2db7f5';
         case 'post':
-            return '#108ee9';
+            return '#1055e9';
         case 'put':
-            return '#108ee9';
+            return '#108e88';
         case 'patch':
-            return '#108ee9';
+            return '#888ee9';
         case 'delete':
             return '#f50';
         default:

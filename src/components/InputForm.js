@@ -25,7 +25,7 @@ const InputForm = ({ parameters, form }) => {
                             <tr key={p.name}>
                                 <td>{p.name}</td>
                                 <td>
-                                    <Form.Item name={p.name}>
+                                    <Form.Item name={p.name} initialValue=''>
                                         <Input placeholder={`please input ${p.name}'s value`} />
                                     </Form.Item>
                                 </td>

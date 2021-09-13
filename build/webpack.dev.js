@@ -9,12 +9,20 @@ module.exports = merge(common, {
         port: '8600',
         open: true,
         proxy: {
-            /*
+            /**/
+
+            '/api': {
+                target: 'http://localhost:5560',
+
+                secure: false,
+                changeOrigin: true,
+            },
             '/v2': {
-                target: 'http://petstore.swagger.io',
-                secure: true, //接受对方是https的接口
-                changeOrigin: true, // 是否需要跨域
-            },*/
+                target: 'http://localhost:5560',
+
+                secure: false,
+                changeOrigin: true,
+            },
         },
     },
 });

@@ -1,4 +1,4 @@
-import axios from 'redaxios';
+import axios from 'axios';
 import qs from 'qs';
 
 const service = axios.create({
@@ -7,13 +7,13 @@ const service = axios.create({
     withCredentials: true,
 });
 
-export function post(url, data, params, headers) {
+export function fetch(url, data, params, headers, method) {
     if (!params) {
         params = {};
     }
     params._t = new Date().getTime();
     let config = {
-        method: 'post',
+        method: method || 'post',
         url: url,
         params,
     };
@@ -47,4 +47,19 @@ export function get(url, params, headers) {
     return service(config);
 }
 
-export default service;
+export function post(url, data, params, headers) {
+    return fetch(url, data, params, headers, 'post');
+}
+export function put(url, data, params, headers) {
+    return fetch(url, data, params, headers, 'put');
+}
+
+export function patch(url, data, params, headers) {
+    return fetch(url, data, params, headers, 'patch');
+}
+
+export function del(url, data, params, headers) {
+    return fetch(url, data, params, headers, 'delete');
+}
+
+//export default service;

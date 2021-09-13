@@ -25,8 +25,24 @@ export default {
             } else if (parameter.schema.type && parameter.schema.items) {
                 typeName = `Array[${getInnerItemType(parameter.schema.items)}]`;
             }
+        } else if (parameter['$ref']) {
+            typeName = parameter['$ref'].split('/').pop();
         }
         return typeName;
+    },
+    format(temp, data) {
+        return temp.replace(/\{([\w]+)\}/g, function (s1, s2) {
+            var s = data[s2];
+            if (typeof s != 'undefined') {
+                if (s instanceof Date) {
+                    return s.getTimezoneOffset();
+                } else {
+                    return encodeURIComponent(s);
+                }
+            } else {
+                return '';
+            }
+        });
     },
 };
 

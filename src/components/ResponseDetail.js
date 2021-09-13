@@ -21,6 +21,7 @@ const ResponseDetail = ({ responses, definitions }) => {
     const arrRef = defaultResponse.schema['$ref'].split('/');
     const entity = arrRef.pop();
     const schema = definitions[entity];
+    const existsDefinitions = {};
     if (!schema) {
         return (
             <div className='success-response-message'>
@@ -34,17 +35,45 @@ const ResponseDetail = ({ responses, definitions }) => {
             <div className='success-response-message'>
                 <Tag color='success'>200</Tag> {defaultResponse.description || 'success'}
             </div>
-            <DefinitionDetail schema={schema} />
+            <DefinitionDetail
+                schema={schema}
+                definitions={definitions}
+                existsDefinitions={existsDefinitions}
+            />
         </div>
     );
 };
 
-const DefinitionDetail = ({ schema }) => {
-    if (!schema || schema.type != 'object') {
+const DefinitionDetail = ({ schema, definitions, existsDefinitions }) => {
+    if (!schema) {
         return null;
     }
-    const childDefinition = [];
+    if (schema.type != 'object') {
+        if (schema['$ref']) {
+            schema.type = 'object';
+        } else {
+            return null;
+        }
+    }
+    const childDefinition = {};
     const properties = Object.keys(schema.properties);
+
+    properties.map(pName => {
+        let key = '';
+        const p = schema.properties[pName];
+        if (p.type == 'array' && p.items && p.items['$ref'].startsWith('#/definitions')) {
+            key = p.items['$ref'].split('/').pop();
+        } else if (p['$ref']) {
+            key = p['$ref'].split('/').pop();
+        }
+        if (key && !childDefinition[key] && !existsDefinitions[key] && definitions[key]) {
+            childDefinition[key] = definitions[key];
+            childDefinition[key].name = key;
+            existsDefinitions[key] = 1;
+            return;
+        }
+    });
+
     return (
         <div>
             <table className='detail-table'>
@@ -80,8 +109,15 @@ const DefinitionDetail = ({ schema }) => {
                     }
                 </tbody>
             </table>
-            {childDefinition.map(d => {
-                return <DefinitionDetail schema={d} />;
+            {Object.keys(childDefinition).map(key => {
+                return (
+                    <DefinitionDetail
+                        key={key}
+                        schema={childDefinition[key]}
+                        definitions={definitions}
+                        existsDefinitions={existsDefinitions}
+                    />
+                );
             })}
         </div>
     );
