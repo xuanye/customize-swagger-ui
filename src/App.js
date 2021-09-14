@@ -11,6 +11,11 @@ import { get } from './libs/fetch';
 const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
 
+const SWAGGER_JSON_PATH =
+    window.__SwaggerJsonPath__ && window.__SwaggerJsonPath__ != '%(SwaggerJsonPath)'
+        ? window.__SwaggerJsonPath__
+        : '/v2/swagger.json';
+
 const App = () => {
     const swagger = useSwagger();
 
@@ -21,7 +26,7 @@ const App = () => {
     useEffect(() => {
         //
         const fetchData = async () => {
-            const result = await get('/v2/swagger.json');
+            const result = await get(SWAGGER_JSON_PATH);
 
             const data = result.data;
 
