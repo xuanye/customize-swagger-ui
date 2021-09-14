@@ -65,6 +65,21 @@ const DebugPanel = ({ method, definitions }) => {
             //console.log(res);
         } catch (error) {
             setLoading(false);
+
+            if (error.response) {
+                //console.log(error.response);
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                setResponseStatus(error.response.status || 500);
+                setResponseJson(error.response.data || error.response.statusText);
+                return;
+            }
+            console.log(error.toJSON());
+            if (error.message) {
+                //setResponseStatus(404);
+                setResponseJson(error.message);
+            }
+            //console.log(error);
             if (error.status) {
                 setResponseStatus(error.status);
             } else {

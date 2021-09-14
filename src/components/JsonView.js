@@ -3,15 +3,15 @@ import { Tag, Alert } from 'antd';
 import ReactJson from 'react-json-view';
 
 const JsonView = ({ json, status }) => {
-    if (!json) {
+    if (status == 0) {
         return null;
     }
-
+    //console.log('🚀 ~ file: JsonView.js ~ line 6 ~ JsonView ~ json, status', json, status);
     const detail =
         typeof json == 'string' ? (
-            <Alert message={json} type='error' />
+            <Alert message={json || '<<Empty>>'} type='error' />
         ) : (
-            <ReactJson src={json}></ReactJson>
+            <ReactJson src={json || {}}></ReactJson>
         );
     return (
         <div>
