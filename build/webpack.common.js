@@ -6,7 +6,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        app: './src/index.js',
+        main: {
+            import: './src/index.js',
+            // main.js 需要提取出来的依赖，值为字符串（值只能是字符串）
+            dependOn: 'shared',
+        },
+        shared: ['antd', 'axios', 'react', 'react-dom', 'react-json-view'],
     },
     plugins: [
         new CopyWebpackPlugin({
