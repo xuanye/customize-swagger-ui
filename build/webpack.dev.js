@@ -12,13 +12,13 @@ module.exports = merge(common, {
             /**/
 
             '/api': {
-                target: 'http://localhost:5560',
+                target: 'http://localhost:5000',
 
                 secure: false,
                 changeOrigin: true,
             },
             '/v2': {
-                target: 'http://localhost:5560',
+                target: 'http://localhost:5000',
 
                 secure: false,
                 changeOrigin: true,

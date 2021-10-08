@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 const service = axios.create({
-    baseURL: '',
+    baseURL: '/',
     timeout: 60000,
     withCredentials: true,
 });
@@ -18,7 +18,11 @@ export function fetch(url, data, params, headers, method) {
         params,
     };
     if (data) {
-        if (headers && headers['Content-Type'] == 'multipart/form-data') {
+        if (
+            headers &&
+            (headers['Content-Type'] == 'multipart/form-data' ||
+                headers['Content-Type'] == 'application/json')
+        ) {
             config.data = data;
         } else {
             config.data = qs.stringify(data, { indices: false });

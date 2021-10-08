@@ -49,7 +49,9 @@ const DebugPanel = ({ method, definitions }) => {
     const startRequest = async () => {
         setLoading(true);
         const values = form.getFieldsValue();
-        const data = requestType == 1 ? values : JSON.stringify(values['json-body-9527'] || '');
+        console.log(values);
+        const data = requestType == 1 ? values : JSON.parse(values['json-body-9527'] || '{}');
+        console.log(data);
         try {
             const res = await service.request(method, data, requestType);
             if (res) {
@@ -74,7 +76,7 @@ const DebugPanel = ({ method, definitions }) => {
                 setResponseJson(error.response.data || error.response.statusText);
                 return;
             }
-            console.log(error.toJSON());
+            console.log(error);
             if (error.message) {
                 //setResponseStatus(404);
                 setResponseJson(error.message);
