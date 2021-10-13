@@ -3565,6 +3565,11 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lockr@^0.9.0-beta.0:
+  version "0.9.0-beta.0"
+  resolved "https://registry.yarnpkg.com/lockr/-/lockr-0.9.0-beta.0.tgz#2d13863699a0b358fbe5b8b4d6c6af7913e655bb"
+  integrity sha512-/00iP8I+RJStGkExa8bW5yl1tIyxZvYS1eM5S8ze9D8A73QOxXMSE0lijF37b2HryyqzFJi7vS9LdurTX5e/CA==
+
 lodash.curry@^4.0.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.curry/-/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"

@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Form, Button, Radio, Row, Col } from 'antd';
+import { Divider, Form, Input, Button, Radio, Row, Col, Space, Modal } from 'antd';
 import { ThunderboltTwoTone, RocketTwoTone } from '@ant-design/icons';
+
+import * as Lockr from 'lockr';
 
 import InputForm from './InputForm';
 import JsonForm from './JsonForm';
 import JsonView from './JsonView';
+import TokenForm from './TokenForm';
 
 import useRequest from '../hooks/request';
 //import useSwagger from '../hooks/swagger'
 
 import service from '@/service/common';
+
+Lockr.setPrefix('swagger_');
 
 const radioOptions = [
     { label: 'Form', value: 1 },
@@ -20,10 +25,12 @@ const DebugPanel = ({ method, definitions }) => {
     const request = useRequest();
 
     const [form] = Form.useForm();
+    const [tokenForm] = Form.useForm();
     const [requestType, setRequestType] = useState(1);
     const [responseJson, setResponseJson] = useState(null);
     const [responseStatus, setResponseStatus] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
 
     //const swagger = useSwagger(model => [model.currentId]);
     useEffect(() => {
@@ -46,14 +53,24 @@ const DebugPanel = ({ method, definitions }) => {
         setLoading(false);
     }, [method]);
 
+    useEffect(() => {
+        if (!isModalVisible) {
+            return;
+        }
+        let token = Lockr.get('jwt_token');
+        token = token || '';
+        tokenForm.setFieldsValue({ token });
+    }, [isModalVisible]);
+
     const startRequest = async () => {
         setLoading(true);
         const values = form.getFieldsValue();
-        console.log(values);
+
         const data = requestType == 1 ? values : JSON.parse(values['json-body-9527'] || '{}');
-        console.log(data);
+        //console.log(data);
         try {
-            const res = await service.request(method, data, requestType);
+            const token = Lockr.get('jwt_token');
+            const res = await service.request(method, data, requestType, token);
             if (res) {
                 if (res.status) {
                     setResponseStatus(res.status);
@@ -106,21 +123,36 @@ const DebugPanel = ({ method, definitions }) => {
     const requestTypeChanged = e => {
         setRequestType(parseInt(e.target.value));
     };
+    const handlerShowModel = () => {
+        setModalVisible(true);
+    };
+    const handlerModelOk = () => {
+        const token = tokenForm.getFieldValue('token');
+        Lockr.set('jwt_token', token);
+        setModalVisible(false);
+    };
+    const handlerModelCancel = () => {
+        setModalVisible(false);
+    };
     return (
         <div>
             <Divider orientation='left'>
                 <ThunderboltTwoTone /> Parameters
             </Divider>
-
             <Row>
                 <Col span={6} offset={18} style={{ textAlign: 'right' }}>
-                    <Radio.Group
-                        options={radioOptions}
-                        onChange={requestTypeChanged}
-                        value={requestType}
-                        optionType='button'
-                        buttonStyle='solid'
-                    />
+                    <Space>
+                        <Button danger onClick={handlerShowModel}>
+                            Token
+                        </Button>
+                        <Radio.Group
+                            options={radioOptions}
+                            onChange={requestTypeChanged}
+                            value={requestType}
+                            optionType='button'
+                            buttonStyle='solid'
+                        />
+                    </Space>
                 </Col>
             </Row>
             {formElement}
@@ -134,6 +166,14 @@ const DebugPanel = ({ method, definitions }) => {
                 <RocketTwoTone twoToneColor='#e90' /> Response
             </Divider>
             <JsonView json={responseJson} status={responseStatus} />
+
+            <Modal
+                title='Edit Request Token'
+                visible={isModalVisible}
+                onOk={handlerModelOk}
+                onCancel={handlerModelCancel}>
+                <TokenForm form={tokenForm} />
+            </Modal>
         </div>
     );
 };

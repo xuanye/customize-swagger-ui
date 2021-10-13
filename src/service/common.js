@@ -2,7 +2,7 @@ import * as fetch from '../libs/fetch';
 import Utility from '@/libs/utility';
 
 export default class CommonService {
-    static request(schema, data, type) {
+    static request(schema, data, type, token) {
         //console.log(schema);
         const method = schema.method.toLowerCase();
         let action = method === 'delete' ? fetch['del'] : fetch[method];
@@ -19,6 +19,9 @@ export default class CommonService {
             //not get
             headers['Content-Type'] =
                 type == 1 ? 'application/x-www-form-urlencoded' : 'application/json';
+        }
+        if (!!token) {
+            headers['Authorization'] = token;
         }
 
         let path = '';
