@@ -5,7 +5,13 @@ const InputForm = ({ parameters, form }) => {
     if (!parameters) {
         return null;
     }
-
+    let inBody = false;
+    for (let i = 0, l = parameters.length; i < l; i++) {
+        if (parameters[i].in == 'body') {
+            inBody = true;
+            break;
+        }
+    }
     return (
         <Form className='request-form' form={form} name='request-form'>
             <table className='detail-table'>
@@ -30,7 +36,7 @@ const InputForm = ({ parameters, form }) => {
                                     </Form.Item>
                                 </td>
                                 <td>{p.description}</td>
-                                <td>{p.in}</td>
+                                <td>{inBody ? 'body' : p.in}</td>
                                 <td>{Utility.getTypeName(p)}</td>
                                 <td>{p.required}</td>
                             </tr>

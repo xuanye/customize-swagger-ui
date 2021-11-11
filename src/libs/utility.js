@@ -20,10 +20,10 @@ export default {
                 typeName += `(format:${parameter.format})`;
             }
         } else if (parameter.schema) {
-            if (parameter.schema['$ref']) {
-                typeName = parameter.schema['$ref'].split('/').pop();
-            } else if (parameter.schema.type && parameter.schema.items) {
+            if (parameter.schema.items) {
                 typeName = `Array[${getInnerItemType(parameter.schema.items)}]`;
+            } else if (parameter.schema['$ref']) {
+                typeName = parameter.schema['$ref'].split('/').pop();
             }
         } else if (parameter['$ref']) {
             typeName = parameter['$ref'].split('/').pop();
@@ -50,10 +50,16 @@ function getInnerItemType(item) {
     if (!item) {
         return 'unknown';
     }
+
+    if (Array.isArray(item) && item.length > 0) {
+        item = item[0];
+    }
+
     if (item.type) {
         return item.type;
     } else if (item['$ref']) {
         return item['$ref'].split('/').pop();
     }
+
     return 'unknown';
 }
