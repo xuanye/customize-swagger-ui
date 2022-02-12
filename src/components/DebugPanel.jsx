@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Form, Input, Button, Radio, Row, Col, Space, Modal } from 'antd';
+import { Divider, Form, Button, Radio, Row, Col, Space, Modal } from 'antd';
 import { ThunderboltTwoTone, RocketTwoTone } from '@ant-design/icons';
 
 import * as Lockr from 'lockr';
