@@ -80,7 +80,12 @@ const DefinitionDetail = ({ schema, definitions, existsDefinitions, showCurrent 
     properties.map(pName => {
         let key = '';
         const p = schema.properties[pName];
-        if (p.type == 'array' && p.items && p.items['$ref'].startsWith('#/definitions')) {
+        if (
+            p.type == 'array' &&
+            p.items &&
+            p.items['$ref'] &&
+            p.items['$ref'].startsWith('#/definitions')
+        ) {
             key = p.items['$ref'].split('/').pop();
         } else if (p['$ref']) {
             if (p.items && Array.isArray(p.items)) {

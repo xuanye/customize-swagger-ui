@@ -37,7 +37,7 @@ export default defineConfig({
         },
     },
     server: {
-        open: '/swagger/index.html',
+        open: '/index.html',
         proxy: {
             /**/
 

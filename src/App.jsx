@@ -24,7 +24,6 @@ const App = () => {
 
     //call once;
     useEffect(() => {
-        //
         const fetchData = async () => {
             const result = await get(SWAGGER_JSON_PATH);
 

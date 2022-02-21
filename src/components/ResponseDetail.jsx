@@ -61,7 +61,12 @@ const DefinitionDetail = ({ schema, definitions, existsDefinitions }) => {
     properties.map(pName => {
         let key = '';
         const p = schema.properties[pName];
-        if (p.type == 'array' && p.items && p.items['$ref'].startsWith('#/definitions')) {
+        if (
+            p.type == 'array' &&
+            p.items &&
+            p.items['$ref'] &&
+            p.items['$ref'].startsWith('#/definitions')
+        ) {
             key = p.items['$ref'].split('/').pop();
         } else if (p['$ref']) {
             key = p['$ref'].split('/').pop();
