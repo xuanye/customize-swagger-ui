@@ -82,7 +82,8 @@ const App = () => {
                             padding: '10px 25px',
                             margin: 0,
                             minHeight: bodyHeight,
-                        }}>
+                        }}
+                    >
                         <Tabs defaultActiveKey='1'>
                             <TabPane tab={tab1Content} key='1'>
                                 <MethodDetail method={method} definitions={swagger.definitions} />

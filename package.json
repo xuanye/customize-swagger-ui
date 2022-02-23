@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "vite",
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "eslint": "",
+    "format": "prettier --write \"src/**/*.js(x)?\""
   },
   "keywords": [],
   "author": "xuanye wong",
@@ -16,6 +17,7 @@
     "@vitejs/plugin-react": "^1.0.7",
     "less": "^4.1.2",
     "prettier": "^2.5.1",
+    "eslint": "^8.9.0",
     "vite": "^2.7.2",
     "vite-plugin-imp": "^2.1.3"
   },

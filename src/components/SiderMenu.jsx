@@ -46,7 +46,8 @@ const SideMenu = () => {
             openKeys={openKeys}
             onOpenChange={onOpenChange}
             onClick={onItemClick}
-            style={{ height: '100%', borderRight: 0 }}>
+            style={{ height: '100%', borderRight: 0 }}
+        >
             {tags}
         </Menu>
     );

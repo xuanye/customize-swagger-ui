@@ -40,10 +40,8 @@ export default defineConfig({
         open: '/index.html',
         proxy: {
             /**/
-
             '/api': {
                 target: 'http://localhost:5560',
-
                 secure: false,
                 changeOrigin: true,
             },

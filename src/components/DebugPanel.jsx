@@ -171,7 +171,8 @@ const DebugPanel = ({ method, definitions }) => {
                 title='Edit Request Token'
                 visible={isModalVisible}
                 onOk={handlerModelOk}
-                onCancel={handlerModelCancel}>
+                onCancel={handlerModelCancel}
+            >
                 <TokenForm form={tokenForm} />
             </Modal>
         </div>
