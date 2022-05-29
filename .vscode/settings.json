@@ -1,4 +1,4 @@
 {
-    "cSpell.words": ["Sider"],
-    "commentTranslate.targetLanguage": "zh-CN"
+  "testing.automaticallyOpenPeekView": "never",
+  "cSpell.words": ["mantine", "Unstyled"]
 }
