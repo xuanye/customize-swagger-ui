@@ -1,62 +1,23 @@
+/// <reference types="../../hooks/swagger" />
+
 import React from 'react';
-import { Navbar, Group, Code, ScrollArea, createStyles } from '@mantine/core';
-import {
-  Notes,
-  CalendarStats,
-  Gauge,
-  PresentationAnalytics,
-  FileAnalytics,
-  Adjustments,
-  Lock,
-} from 'tabler-icons-react';
-
-import { NavbarMenu } from '../NavbarMenu';
-
-const mockData = [
-  { label: 'Dashboard', icon: Gauge },
-  {
-    label: 'Market news',
-    icon: Notes,
-    opened: true,
-    items: [
-      { label: 'Overview', value: '/' },
-      { label: 'Forecasts', value: '/' },
-      { label: 'Outlook', value: '/' },
-      { label: 'Real time', value: '/' },
-    ],
-  },
-  {
-    label: 'Releases',
-    icon: CalendarStats,
-    items: [
-      { label: 'Upcoming releases', value: '/' },
-      { label: 'Previous releases', value: '/' },
-      { label: 'Releases schedule', value: '/' },
-    ],
-  },
-  { label: 'Analytics', icon: PresentationAnalytics },
-  { label: 'Contracts', icon: FileAnalytics },
-  { label: 'Settings', icon: Adjustments },
-  {
-    label: 'Security',
-    icon: Lock,
-    items: [
-      { label: 'Enable 2FA', value: '/' },
-      { label: 'Change password', value: '/' },
-      { label: 'Recovery codes', value: '/' },
-    ],
-  },
-];
+import { Navbar, createStyles } from '@mantine/core';
+import { NavbarMenu, NavbarMenuProps } from '../NavbarMenu';
 
 const useStyles = createStyles(theme => ({
   navbar: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
+    backgroundColor: theme.colors.gray[1],
+    borderRight: `1px solid ${theme.colors.gray[3]}`,
     paddingBottom: 0,
+    height: 'auto',
+    minHeight:
+      'calc(100vh - var(--mantine-header-height, 0px) - var(--mantine-footer-height, 0px))',
   },
 
   links: {
-    marginLeft: -theme.spacing.md,
-    marginRight: -theme.spacing.md,
+    padding: 0,
+    //marginLeft: -theme.spacing.md,
+    //marginRight: -theme.spacing.md,
   },
 
   linksInner: {
@@ -65,20 +26,30 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-export function NavbarNested() {
+interface NavbarNestedProps {
+  services: SwaggerJson.ApiService[];
+  currentId: string;
+  onItemClick: (item: any) => void;
+}
+export function NavbarNested({ services, currentId, onItemClick }: NavbarNestedProps) {
   const { classes } = useStyles();
-  const links = mockData.map(item => (
-    <NavbarMenu
-      {...item}
-      onItemClick={item => {
-        console.log(item);
-      }}
-      key={item.label}
-    />
-  ));
+
+  const links = services.map(service => {
+    const item: NavbarMenuProps = {
+      label: service.name,
+      items: service.methods.map(m => {
+        return {
+          label: m.operationId || m.path,
+          value: m.id,
+        };
+      }),
+      onItemClick: onItemClick || function (item: any) {},
+    };
+    return <NavbarMenu {...item} key={item.label} />;
+  });
 
   return (
-    <Navbar width={{ sm: 220 }} className={classes.navbar}>
+    <Navbar width={{ base: 250 }} className={classes.navbar}>
       <Navbar.Section grow className={classes.links}>
         <div className={classes.linksInner}>{links}</div>
       </Navbar.Section>

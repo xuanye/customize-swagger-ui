@@ -20,7 +20,6 @@
     "hox": "^1.1.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-query": "^3.39.0",
     "tabler-icons-react": "^1.48.0"
   },
   "devDependencies": {

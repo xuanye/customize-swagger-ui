@@ -1,4 +1,6 @@
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
+import { useEffect } from 'react';
 import MyAppShell from './MyAppShell';
 
 export default function App() {
@@ -8,10 +10,13 @@ export default function App() {
       withNormalizeCSS
       theme={{
         // Override any other properties from default theme
-        fontFamily: 'Open Sans, sans serif',
-        //spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
+        fontFamily:
+          '"Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;',
+        //spacing: { xs: 5, sm: 10, md: 15, lg: 20, xl: 30 },
       }}>
-      <MyAppShell />
+      <NotificationsProvider>
+        <MyAppShell />
+      </NotificationsProvider>
     </MantineProvider>
   );
 }

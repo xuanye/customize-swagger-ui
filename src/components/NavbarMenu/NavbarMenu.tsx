@@ -7,7 +7,7 @@ const useStyles = createStyles(theme => ({
     fontWeight: 500,
     display: 'block',
     width: '100%',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
+    padding: `${theme.spacing.xs}px 0`,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
     fontSize: theme.fontSizes.sm,
 
@@ -18,12 +18,13 @@ const useStyles = createStyles(theme => ({
   },
 
   link: {
+    overflow: 'hidden',
     fontWeight: 500,
     display: 'block',
     textDecoration: 'none',
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-    paddingLeft: 31,
-    marginLeft: 30,
+    paddingLeft: 15,
+    marginLeft: 20,
     fontSize: theme.fontSizes.sm,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
     borderLeft: `1px solid ${
@@ -41,21 +42,19 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-interface NavbarMenuProps {
-  icon: TablerIcon;
+export interface NavbarMenuProps {
   label: string;
   opened?: boolean;
   onItemClick: (item: NavbarMenuItemProps) => void;
   items?: NavbarMenuItemProps[];
 }
 
-interface NavbarMenuItemProps {
+export interface NavbarMenuItemProps {
   label: string;
   value: string;
 }
 
 export const NavbarMenu = ({
-  icon: Icon,
   label,
   onItemClick,
   opened: initiallyOpened,
