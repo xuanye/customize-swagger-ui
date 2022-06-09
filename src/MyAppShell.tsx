@@ -98,7 +98,7 @@ const MyAppShell = () => {
       <MainContent
         isLoading={isLoading}
         method={currentMethod}
-        definitions={swaggerJson.definitions}
+        definitions={swaggerJson?.definitions}
       />
     </AppShell>
   );

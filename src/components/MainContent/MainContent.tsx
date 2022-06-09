@@ -7,14 +7,10 @@ type MainContentProps = {
   isLoading: boolean;
   isError?: boolean;
   method: SwaggerJson.ApiMethod | null;
-  definitions: Record<string, SwaggerJson.Schema> | null;
+  definitions?: Record<string, SwaggerJson.Schema>;
 };
 
 export const MainContent: React.FC<MainContentProps> = ({ isLoading, method, definitions }) => {
-  useEffect(() => {
-    console.log('===MainContent===');
-  }, [method]);
-
   if (isLoading || !method) {
     return null;
   }

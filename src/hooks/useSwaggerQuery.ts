@@ -23,7 +23,7 @@ export default function useSwaggerQuery(path: string) {
 
   const [currentId, setCurrentId] = useState('');
 
-  const [definitions, setDefinitions] = useState<Record<string, SwaggerJson.Schema> | null>(null);
+  const [definitions, setDefinitions] = useState<Record<string, SwaggerJson.Schema>>({});
 
   useEffect(() => {
     if (data) {
