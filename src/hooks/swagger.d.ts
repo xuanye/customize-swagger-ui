@@ -148,12 +148,7 @@ declare module SwaggerJson {
 
   export interface Response {
     description?: string;
-    schema?: Reference;
-  }
-  export interface Reference {
-    type?: string;
-    items?: Reference;
-    $ref?: string;
+    schema?: Schema;
   }
   export interface Schema {
     name?: string;

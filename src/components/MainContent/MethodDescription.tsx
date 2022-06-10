@@ -12,7 +12,7 @@ export const MethodDescription: React.FC<MethodDescriptionProps> = ({ method, de
     <>
       <MethodSummary method={method} />
       <MethodParameters parameters={method!.parameters} definitions={definitions || {}} />
-      <MethodResponse response={method?.responses} definitions={definitions} />
+      <MethodResponse responses={method?.responses} definitions={definitions} />
     </>
   );
 };
