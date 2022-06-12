@@ -3,7 +3,7 @@ import { MethodSummary } from './MethodSummary';
 import { MethodParameters } from './MethodParameters';
 import { MethodResponse } from './MethodResponse';
 type MethodDescriptionProps = {
-  method: SwaggerJson.ApiMethod | null;
+  method: SwaggerJson.ApiMethod;
   definitions?: Record<string, SwaggerJson.Schema>;
 };
 
@@ -11,8 +11,8 @@ export const MethodDescription: React.FC<MethodDescriptionProps> = ({ method, de
   return (
     <>
       <MethodSummary method={method} />
-      <MethodParameters parameters={method!.parameters} definitions={definitions || {}} />
-      <MethodResponse responses={method?.responses} definitions={definitions} />
+      <MethodParameters parameters={method.parameters} definitions={definitions || {}} />
+      <MethodResponse responses={method.responses} definitions={definitions} />
     </>
   );
 };

@@ -34,7 +34,7 @@ const MyAppShell = () => {
       //console.log(swaggerJson.services);
       return swaggerJson.services[parseInt(path[0])].methods[parseInt(path[1])];
     }
-    return null;
+    return undefined;
   }, [currentId]);
   return (
     <AppShell

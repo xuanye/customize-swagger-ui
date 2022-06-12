@@ -1,12 +1,12 @@
 import React from 'react';
-import { Table, Badge, createStyles, Group } from '@mantine/core';
-
+import { Table, Badge, Group } from '@mantine/core';
+import { useMethodStyleColor } from './hooks/useMethodStyleColor';
 type MethodSummaryProps = {
-  method: SwaggerJson.ApiMethod | null;
+  method: SwaggerJson.ApiMethod;
 };
 
 export const MethodSummary: React.FC<MethodSummaryProps> = ({ method }) => {
-  const methodColor = useMethodStyleColor(method?.method || '');
+  const methodColor = useMethodStyleColor(method.method || '');
   return (
     <Table verticalSpacing='xs' fontSize='xs'>
       <tbody>
@@ -15,9 +15,9 @@ export const MethodSummary: React.FC<MethodSummaryProps> = ({ method }) => {
           <td colSpan={3}>
             <Group>
               <Badge size='sm' radius='xs' color={methodColor}>
-                {method?.method.toUpperCase()}
+                {method.method.toUpperCase()}
               </Badge>
-              {method?.path}
+              {method.path}
             </Group>
           </td>
         </tr>
@@ -25,7 +25,7 @@ export const MethodSummary: React.FC<MethodSummaryProps> = ({ method }) => {
           <td className='title'>Summary</td>
           <td colSpan={3}>{method?.summary}</td>
         </tr>
-        {method?.description && (
+        {method.description && (
           <tr>
             <td className='title'>Description</td>
             <td colSpan={3}>{method?.description}</td>
@@ -45,21 +45,3 @@ export const MethodSummary: React.FC<MethodSummaryProps> = ({ method }) => {
     </Table>
   );
 };
-
-function useMethodStyleColor(methodName: string) {
-  const lowerCaseName = methodName.toLowerCase();
-  switch (lowerCaseName) {
-    case 'get':
-      return 'green';
-    case 'post':
-      return 'blue';
-    case 'put':
-      return 'teal';
-    case 'patch':
-      return 'violet';
-    case 'delete':
-      return 'red';
-    default:
-      return '';
-  }
-}

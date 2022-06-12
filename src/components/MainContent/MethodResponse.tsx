@@ -4,7 +4,7 @@ import { CircleCheck } from 'tabler-icons-react';
 import { DefinitionDetail } from './DefinitionDetail';
 
 type MethodResponseProps = {
-  responses?: Record<string, SwaggerJson.Response>;
+  responses: Record<string, SwaggerJson.Response>;
   definitions?: Record<string, SwaggerJson.Schema>;
 };
 
@@ -86,15 +86,18 @@ type StatusBarProps = {
 const StatusBar: React.FC<StatusBarProps> = ({ statusCode, description = 'success' }) => {
   return (
     <Group style={{ marginTop: '10px' }}>
-      <Badge size='xs' color={getStatusColor(statusCode)} radius='sm'>
+      <Badge size='xs' color={getStatusColor(statusCode)} radius='sm' variant='outline'>
         {statusCode}
       </Badge>
-      <Text size='sm'> {description}</Text>
+      <Text size='sm'>{description}</Text>
     </Group>
   );
 };
 
 function getStatusColor(statusCode: string) {
+  if (statusCode.toLowerCase() == 'default') {
+    return 'teal';
+  }
   const statusCodeVal = parseInt(statusCode);
   if (statusCodeVal >= 500) {
     return 'red';
