@@ -36,16 +36,18 @@ export function NavbarNested({ services, currentId, onItemClick }: NavbarNestedP
 
   const links = services.map(service => {
     const item: NavbarMenuProps = {
+      id: service.name,
       label: service.name,
       items: service.methods.map(m => {
         return {
+          id: m.id,
           label: m.operationId || m.path,
           value: m.id,
         };
       }),
       onItemClick: onItemClick || function (item: any) {},
     };
-    return <NavbarMenu {...item} key={item.label} />;
+    return <NavbarMenu {...item} key={item.id} />;
   });
 
   return (

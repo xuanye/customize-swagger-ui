@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useEffect, useImperativeHandle, useMemo } from 'react';
 import { Table, Box, Input } from '@mantine/core';
 import utility from '@/libs/utility';
 import { useForm } from '@mantine/form';
 
 type InputFormProps = {
   parameters: SwaggerJson.Parameter[];
+  onRef?: React.Ref<{ formSubmit(): any }>;
 };
-export const InputForm: React.FC<InputFormProps> = ({ parameters }) => {
+export const InputForm: React.FC<InputFormProps> = ({ parameters, onRef }) => {
   const inBody = parameters.findIndex(x => x.in == 'body') >= 0;
-  const hasFile = parameters.findIndex(x => x.in == 'file') >= 0;
+
   const initialForm = getInitialValues(parameters);
+
   const form = useForm({
     initialValues: initialForm,
   });
+  useEffect(() => {
+    form.setValues(getInitialValues(parameters));
+  }, [parameters]);
+
+  useImperativeHandle(onRef, () => {
+    return {
+      formSubmit: raiseSubmit,
+    };
+  });
+
+  const raiseSubmit = () => {
+    return form.values;
+  };
+
   return (
-    <form {hasFile}>
+    <form>
       <Box sx={{ marginTop: '10px' }}>
         <Table verticalSpacing='xs' fontSize='xs'>
           <thead>
@@ -41,7 +57,12 @@ export const InputForm: React.FC<InputFormProps> = ({ parameters }) => {
                   <tr key={p.name}>
                     <td>{p.name}</td>
                     <td>
-                      <Input size='xs' placeholder={p.name} {...form.getInputProps(p.name)} />
+                      <Input
+                        size='xs'
+                        radius='xs'
+                        placeholder={p.type}
+                        {...form.getInputProps(p.name)}
+                      />
                     </td>
                     <td>{p.description}</td>
                     <td>{inBody && p.in != 'path' && p.in != 'query' ? 'body' : p.in}</td>
@@ -62,7 +83,7 @@ export const InputForm: React.FC<InputFormProps> = ({ parameters }) => {
 function getInitialValues(parameters: SwaggerJson.Parameter[]) {
   const retVal: Record<string, any> = {};
   parameters.forEach(p => {
-    retVal[p.name] = '';
+    retVal[p.name] = '1';
   });
   return retVal;
 }

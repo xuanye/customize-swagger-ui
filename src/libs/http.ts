@@ -74,7 +74,13 @@ class Http {
   ): Promise<R> {
     return this.http.post<T, R>(url, data, config);
   }
-
+  postForm<T = any, R = AxiosResponse<T>>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+  ): Promise<R> {
+    return this.http.postForm<T, R>(url, data, config);
+  }
   put<T = any, R = AxiosResponse<T>>(
     url: string,
     data?: T,
@@ -82,8 +88,22 @@ class Http {
   ): Promise<R> {
     return this.http.put<T, R>(url, data, config);
   }
-
+  putForm<T = any, R = AxiosResponse<T>>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+  ): Promise<R> {
+    return this.http.putForm<T, R>(url, data, config);
+  }
   patch<T = any, R = AxiosResponse<T>>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+  ): Promise<R> {
+    return this.http.patch<T, R>(url, data, config);
+  }
+
+  patchForm<T = any, R = AxiosResponse<T>>(
     url: string,
     data?: T,
     config?: AxiosRequestConfig,
@@ -124,3 +144,5 @@ class Http {
 }
 
 export const http = new Http();
+
+export type { AxiosRequestConfig, AxiosResponse };

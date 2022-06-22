@@ -43,6 +43,7 @@ const useStyles = createStyles(theme => ({
 }));
 
 export interface NavbarMenuProps {
+  id: string;
   label: string;
   opened?: boolean;
   onItemClick: (item: NavbarMenuItemProps) => void;
@@ -50,11 +51,13 @@ export interface NavbarMenuProps {
 }
 
 export interface NavbarMenuItemProps {
+  id: string;
   label: string;
   value: string;
 }
 
 export const NavbarMenu = ({
+  id,
   label,
   onItemClick,
   opened: initiallyOpened,
@@ -69,7 +72,7 @@ export const NavbarMenu = ({
       <Text<'a'>
         component='a'
         className={classes.link}
-        key={item.label}
+        key={item.id}
         onClick={event => {
           onItemClick(item);
           event.preventDefault();
