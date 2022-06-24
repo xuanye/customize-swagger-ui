@@ -1,4 +1,6 @@
+import { CacheKeys } from '@/config/constants';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import MyStore from './store';
 
 enum StatusCode {
   Unauthorized = 401,
@@ -17,13 +19,12 @@ const headers: Readonly<Record<string, string | boolean>> = {
 // We can use the following function to inject the JWT token through an interceptor
 // We get the `accessToken` from the localStorage that we set when we authenticate
 const injectToken = (config: AxiosRequestConfig): AxiosRequestConfig => {
-  const token = localStorage.getItem('accessToken');
-
+  const token = MyStore.get(CacheKeys.AuthorizationToken);
   if (token) {
     if (!config.headers) {
       config.headers = headers;
     }
-    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['Authorization'] = token;
   }
   return config;
 };

@@ -1,13 +1,20 @@
-import { Button, Group, Title, RadioGroup, Radio } from '@mantine/core';
-import React, { lazy, Suspense, useCallback, useRef, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Radio, Row, Col, Space, Modal, Form } from 'antd';
+import { AxiosResponse } from 'axios';
 import { InputForm } from './InputForm';
-import { http } from '@/libs/http';
 import { useRequestTye } from './hooks/useRequestType';
 import { useHttpAction } from './hooks/useHttpAction';
+import { ResponseView } from './ResponseView';
+import { useToggle } from './hooks/useToggle';
+import { TokenForm } from './TokenForm';
+import { JsonForm } from './JsonForm';
+import MyStore from '@/libs/store';
+import { CacheKeys } from '@/config/constants';
 
-import { JsonView } from './JsonView';
-
-const JsonForm = lazy(() => import('./JsonForm'));
+const radioOptions = [
+  { label: 'Form', value: 'form' },
+  { label: 'Json', value: 'raw' },
+];
 
 type DebugContentProps = {
   method: SwaggerJson.ApiMethod;
@@ -19,9 +26,12 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
   const [response, setResponse] = useState<any>(undefined);
   const [statusCode, setStatusCode] = useState(0);
 
+  const [modalVisible, toggleModalVisible] = useToggle(false);
+
   const formRef = useRef<{ formSubmit(): any }>(null);
   const handlerSend = useCallback(async () => {
     const formValues = formRef.current?.formSubmit();
+    console.log('🚀 ~ file: DebugContent.tsx ~ line 34 ~ handlerSend ~ formValues', formValues);
 
     try {
       var rsp = await httpAction(formValues as Record<string, any>, requestType);
@@ -31,41 +41,84 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
 
       //console.log(rsp);
     } catch (e) {
-      console.log(e);
-    }
-  }, [http, method]);
+      console.log('🚀 ~ file: DebugContent.tsx ~ line 44 ~ handlerSend ~ e', e);
+      const errorRsp = e as any as AxiosResponse<any, any>;
+      if (errorRsp) {
+        if (errorRsp.status) {
+          setStatusCode(errorRsp.status);
+        }
 
+        if (errorRsp.data) {
+          setResponse(errorRsp.data);
+        } else if (errorRsp.request?.responseText) {
+          setResponse(errorRsp.request?.responseText);
+        }
+      } else {
+        setStatusCode(500);
+        setResponse('Internal Server Error');
+      }
+    }
+  }, [httpAction, requestType]);
+
+  const tokenFormRef = useRef<{ getToken(): string; setToken(token: string): void }>(null);
+
+  useEffect(() => {
+    if (modalVisible) {
+      var token = MyStore.get(CacheKeys.AuthorizationToken) || '';
+      tokenFormRef.current?.setToken(token);
+    }
+  }, [modalVisible]);
+
+  const handlerTokenFormSubmit = useCallback(() => {
+    var token = tokenFormRef.current?.getToken();
+    MyStore.set(CacheKeys.AuthorizationToken, token || '');
+    toggleModalVisible();
+  }, []);
+
+  const handlerTokenFormCancel = useCallback(() => {
+    toggleModalVisible();
+  }, []);
   return (
     <>
-      <Group spacing='xs' position='apart'>
-        <Title order={4}>{method.path}</Title>
-        <Group>
-          <Button size='xs' radius='xs' onClick={handlerSend}>
-            Send
-          </Button>
-          <Button size='xs' radius='xs' color='violet'>
-            Token
-          </Button>
-        </Group>
-      </Group>
-      <RadioGroup
-        sx={{ marginTop: '15px' }}
-        size='xs'
-        value={requestType}
-        onChange={v => {
-          setRequestType(v as 'form' | 'raw' | 'none');
-        }}>
-        <Radio value='none' label='none' />
-        <Radio value='form' label='form-data' />
-        <Radio value='raw' label='raw(json)' />
-      </RadioGroup>
+      <Row>
+        <Col span={12} offset={12} style={{ textAlign: 'right' }}>
+          <Space>
+            <Button
+              danger
+              onClick={() => {
+                toggleModalVisible();
+              }}>
+              Token
+            </Button>
+            <Radio.Group
+              options={radioOptions}
+              onChange={e => {
+                setRequestType(e.target.value as 'form' | 'raw');
+              }}
+              value={requestType}
+              optionType='button'
+              buttonStyle='solid'
+            />
+          </Space>
+        </Col>
+      </Row>
+
       {requestType == 'form' && <InputForm parameters={method.parameters} onRef={formRef} />}
-      {requestType == 'raw' && (
-        <Suspense fallback={<div>Loading</div>}>
-          <JsonForm parameters={method.parameters} />
-        </Suspense>
-      )}
-      <JsonView response={response} statusCode={statusCode}></JsonView>
+      {requestType == 'raw' && <JsonForm parameters={method.parameters} onRef={formRef} />}
+      <div>
+        <Button type='primary' onClick={handlerSend}>
+          Send
+        </Button>
+      </div>
+      <ResponseView response={response} statusCode={statusCode}></ResponseView>
+
+      <Modal
+        title='Edit Request Token'
+        visible={modalVisible}
+        onOk={handlerTokenFormSubmit}
+        onCancel={handlerTokenFormCancel}>
+        <TokenForm onRef={tokenFormRef} />
+      </Modal>
     </>
   );
 };

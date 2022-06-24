@@ -1,60 +1,53 @@
-/// <reference types="../../hooks/swagger" />
+import React, { useEffect, useState } from 'react';
+import { Menu } from 'antd';
 
-import React from 'react';
-import { Navbar, createStyles } from '@mantine/core';
-import { NavbarMenu, NavbarMenuProps } from '../NavbarMenu';
-
-const useStyles = createStyles(theme => ({
-  navbar: {
-    backgroundColor: theme.colors.gray[1],
-    borderRight: `1px solid ${theme.colors.gray[3]}`,
-    paddingBottom: 0,
-    height: 'auto',
-    minHeight:
-      'calc(100vh - var(--mantine-header-height, 0px) - var(--mantine-footer-height, 0px))',
-  },
-
-  links: {
-    padding: 0,
-    //marginLeft: -theme.spacing.md,
-    //marginRight: -theme.spacing.md,
-  },
-
-  linksInner: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-}));
+import { FolderOutlined } from '@ant-design/icons';
 
 interface NavbarNestedProps {
   services: SwaggerJson.ApiService[];
-  currentId: string;
   onItemClick: (item: any) => void;
 }
-export function NavbarNested({ services, currentId, onItemClick }: NavbarNestedProps) {
-  const { classes } = useStyles();
 
-  const links = services.map(service => {
-    const item: NavbarMenuProps = {
-      id: service.name,
-      label: service.name,
-      items: service.methods.map(m => {
+export const NavbarNested: React.FC<NavbarNestedProps> = ({ services, onItemClick }) => {
+  const [openKeys, setOpenKeys] = useState(['']);
+  const [rootMenuKeys, setRootMenuKeys] = useState(['']);
+
+  const onOpenChange = (keys: string[]) => {
+    const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1) || '';
+    if (rootMenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
+  useEffect(() => {
+    const keys = services.map(tag => {
+      return tag.name;
+    });
+    setRootMenuKeys(keys);
+  }, [services]);
+
+  const items = services.map(tag => {
+    return {
+      label: tag.name,
+      key: tag.name,
+      icon: <FolderOutlined />,
+      children: tag.methods.map(method => {
         return {
-          id: m.id,
-          label: m.operationId || m.path,
-          value: m.id,
+          label: method.operationId || method.path,
+          key: method.id,
         };
       }),
-      onItemClick: onItemClick || function (item: any) {},
     };
-    return <NavbarMenu {...item} key={item.id} />;
   });
 
   return (
-    <Navbar width={{ base: 250 }} className={classes.navbar}>
-      <Navbar.Section grow className={classes.links}>
-        <div className={classes.linksInner}>{links}</div>
-      </Navbar.Section>
-    </Navbar>
+    <Menu
+      mode='inline'
+      openKeys={openKeys}
+      onOpenChange={onOpenChange}
+      onClick={onItemClick}
+      //style={{ height: '100%', borderRight: 0 }}
+      items={items}></Menu>
   );
-}
+};

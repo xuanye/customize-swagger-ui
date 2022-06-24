@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { Table, Divider, Box, Text } from '@mantine/core';
-import { Forms } from 'tabler-icons-react';
+import { Divider } from 'antd';
+import { ContainerTwoTone } from '@ant-design/icons';
 import utility from '@/libs/utility';
 import { DefinitionDetail } from './DefinitionDetail';
 
@@ -32,22 +32,13 @@ export const MethodParameters: React.FC<MethodParametersProps> = ({ parameters, 
 
   return (
     <>
-      <Divider
-        my='xs'
-        variant='dashed'
-        labelPosition='center'
-        label={
-          <>
-            <Forms color='green' size={12} />
-            <Box ml={5}>
-              <Text weight={500} size='sm'>
-                Parameters
-              </Text>
-            </Box>
-          </>
-        }
-      />
-      <Table verticalSpacing='xs' fontSize='xs'>
+      <Divider dashed orientation='center'>
+        <span>
+          <ContainerTwoTone />
+          Parameters
+        </span>
+      </Divider>
+      <table className='detail-table'>
         <thead>
           <tr>
             <th>Name</th>
@@ -81,7 +72,7 @@ export const MethodParameters: React.FC<MethodParametersProps> = ({ parameters, 
             })
           }
         </tbody>
-      </Table>
+      </table>
       <DefinitionDetail
         schema={extraSchema}
         definitions={definitions}

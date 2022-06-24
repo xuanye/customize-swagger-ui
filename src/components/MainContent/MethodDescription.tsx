@@ -1,4 +1,4 @@
-import React, { useMemo, memo, useEffect } from 'react';
+import React from 'react';
 import { MethodSummary } from './MethodSummary';
 import { MethodParameters } from './MethodParameters';
 import { MethodResponse } from './MethodResponse';

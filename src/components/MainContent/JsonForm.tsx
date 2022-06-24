@@ -1,16 +1,29 @@
-import React from 'react';
-import { Table, Box, Input } from '@mantine/core';
+import React, { useMemo, useImperativeHandle } from 'react';
+import { Input, Form } from 'antd';
 import utility from '@/libs/utility';
 
+const { TextArea } = Input;
 type JsonFormProps = {
   parameters: SwaggerJson.Parameter[];
+  onRef?: React.Ref<{ formSubmit(): any }>;
 };
 
-const JsonForm: React.FC<JsonFormProps> = ({ parameters }) => {
-  const hasPathParameters = parameters.findIndex(x => x.in == 'path') >= 0;
-  const pathParameters = hasPathParameters ? (
-    <Box sx={{ marginTop: '10px' }}>
-      <Table verticalSpacing='xs' fontSize='xs'>
+export const JsonForm: React.FC<JsonFormProps> = ({ parameters, onRef }) => {
+  const [form] = Form.useForm();
+
+  useImperativeHandle(onRef, () => {
+    return {
+      formSubmit: raiseSubmit,
+    };
+  });
+
+  const raiseSubmit = () => {
+    return form.getFieldsValue();
+  };
+  const pathParameters = useMemo(() => {
+    const hasPathParameters = parameters.some(x => x.in == 'path');
+    return hasPathParameters ? (
+      <table>
         <thead>
           <tr>
             <th>Name</th>
@@ -25,7 +38,10 @@ const JsonForm: React.FC<JsonFormProps> = ({ parameters }) => {
               <tr key={p.name}>
                 <td>{p.name}</td>
                 <td>
-                  <Input size='xs' />
+                  {' '}
+                  <Form.Item name={p.name} initialValue=''>
+                    <Input placeholder={utility.getTypeName(p)} />
+                  </Form.Item>
                 </td>
                 <td>{p.description}</td>
                 <td>{utility.getTypeName(p)}</td>
@@ -33,15 +49,19 @@ const JsonForm: React.FC<JsonFormProps> = ({ parameters }) => {
             ) : null;
           })}
         </tbody>
-      </Table>
-    </Box>
-  ) : null;
+      </table>
+    ) : null;
+  }, [parameters]);
   return (
     <>
-      {pathParameters}
-      <div>JSON Form</div>
+      <Form className='request-form' form={form} name='request-form'>
+        {pathParameters}
+        <div style={{ padding: '10px 0' }}>
+          <Form.Item name='json-body-9527' initialValue=''>
+            <TextArea rows={15} placeholder='please input json string' />
+          </Form.Item>
+        </div>
+      </Form>
     </>
   );
 };
-
-export default JsonForm;

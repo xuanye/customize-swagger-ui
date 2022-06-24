@@ -1,7 +1,9 @@
-import React, { lazy, Suspense } from 'react';
-import { Tabs } from '@mantine/core';
-import { Rocket, Notes } from 'tabler-icons-react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
+import { Space, Tabs } from 'antd';
 import { MethodDescription } from './MethodDescription';
+import { ProfileTwoTone, BugTwoTone } from '@ant-design/icons';
+
+const { TabPane } = Tabs;
 
 type MainContentProps = {
   isLoading: boolean;
@@ -16,15 +18,29 @@ export const MainContent: React.FC<MainContentProps> = ({ isLoading, method, def
     return null;
   }
   return (
-    <Tabs>
-      <Tabs.Tab label='Debug' color='pink' icon={<Rocket size={16} />}>
+    <Tabs defaultActiveKey='1'>
+      <TabPane
+        tab={
+          <span>
+            <ProfileTwoTone twoToneColor='#52c41a' />
+            Document
+          </span>
+        }
+        key='1'>
+        <MethodDescription method={method} definitions={definitions} />
+      </TabPane>
+      <TabPane
+        tab={
+          <span>
+            <BugTwoTone twoToneColor='#eb2f96' />
+            Debug
+          </span>
+        }
+        key='2'>
         <Suspense fallback={<div>Loading...</div>}>
           <DebugContent method={method} />
         </Suspense>
-      </Tabs.Tab>
-      <Tabs.Tab label='Document' icon={<Notes size={16} />}>
-        <MethodDescription method={method} definitions={definitions} />
-      </Tabs.Tab>
+      </TabPane>
     </Tabs>
   );
 };

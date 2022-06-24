@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Table } from '@mantine/core';
+import React from 'react';
+
 import utility from '@/libs/utility';
 import { useDefinition } from './hooks/useDefinition';
 
@@ -26,7 +26,7 @@ export const DefinitionDetail: React.FC<DefinitionDetailProps> = ({
   }
 
   const currentSchema = showCurrent ? (
-    <Table verticalSpacing='xs' fontSize='xs'>
+    <table className='detail-table'>
       <thead>
         <tr>
           <th colSpan={3}>{schema?.name || ''}</th>
@@ -50,7 +50,7 @@ export const DefinitionDetail: React.FC<DefinitionDetailProps> = ({
           );
         })}
       </tbody>
-    </Table>
+    </table>
   ) : null;
   return (
     <div style={{ marginTop: '5px' }}>

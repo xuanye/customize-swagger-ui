@@ -1,7 +1,8 @@
 import React from 'react';
-import { Divider, Box, Text, Badge, Group } from '@mantine/core';
-import { CircleCheck } from 'tabler-icons-react';
+import { Divider, Space, Tag } from 'antd';
 import { DefinitionDetail } from './DefinitionDetail';
+import { FireTwoTone } from '@ant-design/icons';
+import { useStatusColor } from './hooks/useStatusColor';
 
 type MethodResponseProps = {
   responses: Record<string, SwaggerJson.Response>;
@@ -25,21 +26,12 @@ export const MethodResponse: React.FC<MethodResponseProps> = ({ responses, defin
 
   return (
     <div>
-      <Divider
-        my='xs'
-        variant='dashed'
-        labelPosition='center'
-        label={
-          <>
-            <CircleCheck color='blue' size={12} />
-            <Box ml={5}>
-              <Text weight={500} size='sm'>
-                Response
-              </Text>
-            </Box>
-          </>
-        }
-      />
+      <Divider dashed orientation='center'>
+        <span>
+          <FireTwoTone />
+          Response
+        </span>
+      </Divider>
       {responseDetail}
     </div>
   );
@@ -84,28 +76,13 @@ type StatusBarProps = {
   description?: string;
 };
 const StatusBar: React.FC<StatusBarProps> = ({ statusCode, description = 'success' }) => {
+  const color = useStatusColor(parseInt(statusCode));
   return (
-    <Group style={{ marginTop: '10px' }}>
-      <Badge size='xs' color={getStatusColor(statusCode)} radius='sm' variant='outline'>
-        {statusCode}
-      </Badge>
-      <Text size='sm'>{description}</Text>
-    </Group>
+    <div style={{ marginTop: '10px' }}>
+      <Space>
+        <Tag color={color}>{statusCode}</Tag>
+        <span> {description}</span>
+      </Space>
+    </div>
   );
 };
-
-function getStatusColor(statusCode: string) {
-  if (statusCode.toLowerCase() == 'default') {
-    return 'teal';
-  }
-  const statusCodeVal = parseInt(statusCode);
-  if (statusCodeVal >= 500) {
-    return 'red';
-  } else if (statusCodeVal >= 400) {
-    return 'yellow';
-  } else if (statusCodeVal >= 300) {
-    return 'orange';
-  }
-
-  return 'teal';
-}
