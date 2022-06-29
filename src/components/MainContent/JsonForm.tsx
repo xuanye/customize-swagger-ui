@@ -1,4 +1,4 @@
-import React, { useMemo, useImperativeHandle } from 'react';
+import React, { useMemo, useImperativeHandle, useEffect } from 'react';
 import { Input, Form } from 'antd';
 import utility from '@/libs/utility';
 
@@ -16,14 +16,16 @@ export const JsonForm: React.FC<JsonFormProps> = ({ parameters, onRef }) => {
       formSubmit: raiseSubmit,
     };
   });
-
+  useEffect(() => {
+    form.resetFields();
+  }, [form, parameters]);
   const raiseSubmit = () => {
     return form.getFieldsValue();
   };
   const pathParameters = useMemo(() => {
     const hasPathParameters = parameters.some(x => x.in == 'path');
     return hasPathParameters ? (
-      <table>
+      <table className='detail-table'>
         <thead>
           <tr>
             <th>Name</th>
@@ -37,8 +39,7 @@ export const JsonForm: React.FC<JsonFormProps> = ({ parameters, onRef }) => {
             return p.in == 'path' ? (
               <tr key={p.name}>
                 <td>{p.name}</td>
-                <td>
-                  {' '}
+                <td style={{ width: '25%' }}>
                   <Form.Item name={p.name} initialValue=''>
                     <Input placeholder={utility.getTypeName(p)} />
                   </Form.Item>

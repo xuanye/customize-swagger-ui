@@ -1,5 +1,5 @@
-import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Radio, Row, Col, Space, Modal, Form } from 'antd';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Radio, Row, Col, Space, Modal, Tag } from 'antd';
 import { AxiosResponse } from 'axios';
 import { InputForm } from './InputForm';
 import { useRequestTye } from './hooks/useRequestType';
@@ -10,6 +10,7 @@ import { TokenForm } from './TokenForm';
 import { JsonForm } from './JsonForm';
 import MyStore from '@/libs/store';
 import { CacheKeys } from '@/config/constants';
+import { useMethodStyleColor } from './hooks/useMethodStyleColor';
 
 const radioOptions = [
   { label: 'Form', value: 'form' },
@@ -28,10 +29,13 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
 
   const [modalVisible, toggleModalVisible] = useToggle(false);
 
+  const [loading, setLoading] = useToggle(false);
+
   const formRef = useRef<{ formSubmit(): any }>(null);
   const handlerSend = useCallback(async () => {
     const formValues = formRef.current?.formSubmit();
-    console.log('🚀 ~ file: DebugContent.tsx ~ line 34 ~ handlerSend ~ formValues', formValues);
+
+    setLoading(true);
 
     try {
       var rsp = await httpAction(formValues as Record<string, any>, requestType);
@@ -41,7 +45,6 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
 
       //console.log(rsp);
     } catch (e) {
-      console.log('🚀 ~ file: DebugContent.tsx ~ line 44 ~ handlerSend ~ e', e);
       const errorRsp = e as any as AxiosResponse<any, any>;
       if (errorRsp) {
         if (errorRsp.status) {
@@ -57,8 +60,15 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
         setStatusCode(500);
         setResponse('Internal Server Error');
       }
+    } finally {
+      setLoading(false);
     }
   }, [httpAction, requestType]);
+
+  useEffect(() => {
+    setResponse(undefined);
+    setStatusCode(0);
+  }, [method]);
 
   const tokenFormRef = useRef<{ getToken(): string; setToken(token: string): void }>(null);
 
@@ -78,10 +88,18 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
   const handlerTokenFormCancel = useCallback(() => {
     toggleModalVisible();
   }, []);
+
+  const methodColor = useMethodStyleColor(method?.method || '');
   return (
     <>
       <Row>
-        <Col span={12} offset={12} style={{ textAlign: 'right' }}>
+        <Col span={12}>
+          <Space>
+            <Tag color={methodColor}>{method?.method.toUpperCase()}</Tag>
+            {method?.path}
+          </Space>
+        </Col>
+        <Col span={12} style={{ textAlign: 'right' }}>
           <Space>
             <Button
               danger
@@ -106,7 +124,7 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
       {requestType == 'form' && <InputForm parameters={method.parameters} onRef={formRef} />}
       {requestType == 'raw' && <JsonForm parameters={method.parameters} onRef={formRef} />}
       <div>
-        <Button type='primary' onClick={handlerSend}>
+        <Button type='primary' loading={loading} onClick={handlerSend}>
           Send
         </Button>
       </div>

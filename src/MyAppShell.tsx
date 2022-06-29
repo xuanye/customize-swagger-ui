@@ -9,9 +9,15 @@ import { ApiOutlined } from '@ant-design/icons';
 
 const { Header, Content, Sider } = Layout;
 
+const myWindow = window as any;
+const SWAGGER_JSON_PATH =
+  myWindow.__SwaggerJsonPath__ && myWindow.__SwaggerJsonPath__ != '%(SwaggerJsonPath)'
+    ? myWindow.__SwaggerJsonPath__
+    : '/v2/swagger.json';
+
 const MyAppShell = () => {
   const { isLoading, error, swaggerJson, currentId, setCurrentId } =
-    useSwaggerQuery('/v2/swagger.json');
+    useSwaggerQuery(SWAGGER_JSON_PATH);
   useEffect(() => {
     if (error) {
       alert(error);

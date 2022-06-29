@@ -12,12 +12,13 @@ export const useHttpAction = (method: SwaggerJson.ApiMethod) => {
       const pathObj: Record<string, string> = {};
 
       method.parameters.forEach(p => {
-        if (p.type == 'path') {
+        if (p.in == 'path') {
           pathObj[p.name] = formValues[p.name] || '';
           delete formValues[p.name];
         }
       });
       const path = utility.format(method.path, pathObj);
+      console.log(method.path, pathObj, path);
       if (/[\{\}]+/gi.test(path)) {
         return Promise.reject('required parameter is missing');
       }

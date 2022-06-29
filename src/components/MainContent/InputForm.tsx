@@ -1,4 +1,4 @@
-import React, { useImperativeHandle } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 
 import utility from '@/libs/utility';
 import { Input, Form } from 'antd';
@@ -18,6 +18,9 @@ export const InputForm: React.FC<InputFormProps> = ({ parameters, onRef }) => {
     };
   });
 
+  useEffect(() => {
+    form.resetFields();
+  }, [form, parameters]);
   const raiseSubmit = () => {
     return form.getFieldsValue();
   };
@@ -47,7 +50,7 @@ export const InputForm: React.FC<InputFormProps> = ({ parameters, onRef }) => {
               return (
                 <tr key={p.name}>
                   <td>{p.name}</td>
-                  <td>
+                  <td style={{ width: '25%' }}>
                     <Form.Item name={p.name} initialValue=''>
                       <Input placeholder={utility.getTypeName(p)} />
                     </Form.Item>
