@@ -5,7 +5,7 @@ import { useDefinition } from './hooks/useDefinition';
 
 type DefinitionDetailProps = {
   schema: SwaggerJson.Schema;
-  definitions: Record<string, SwaggerJson.Schema>;
+  definitions?: Record<string, SwaggerJson.Schema>;
   existsDefinitions: Record<string, boolean>;
   showCurrent?: boolean;
 };

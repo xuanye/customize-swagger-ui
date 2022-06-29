@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Layout, Tag, Space, Typography } from 'antd';
+import { Layout, Tag, Space, Typography, message } from 'antd';
 
 import { MainContent } from '@/components/MainContent';
 
@@ -20,7 +20,7 @@ const MyAppShell = () => {
     useSwaggerQuery(SWAGGER_JSON_PATH);
   useEffect(() => {
     if (error) {
-      alert(error);
+      message.error(error);
     }
   }, [error]);
   const bodyHeight = document.body.clientHeight - 90;

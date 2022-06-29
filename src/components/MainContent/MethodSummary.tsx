@@ -1,11 +1,11 @@
 import { Space, Tag } from 'antd';
-import React from 'react';
+import React, { memo } from 'react';
 
 type MethodSummaryProps = {
   method: SwaggerJson.ApiMethod;
 };
 
-export const MethodSummary: React.FC<MethodSummaryProps> = ({ method }) => {
+export const MethodSummary: React.FC<MethodSummaryProps> = memo(({ method }) => {
   const methodColor = useMethodStyleColor(method?.method || '');
   return (
     <table className='detail-table'>
@@ -42,7 +42,7 @@ export const MethodSummary: React.FC<MethodSummaryProps> = ({ method }) => {
       </tbody>
     </table>
   );
-};
+});
 
 function useMethodStyleColor(methodName: string) {
   const lowerCaseName = methodName.toLowerCase();

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export const useDefinition = (
   schema: SwaggerJson.Schema,
   existsDefinitions: Record<string, boolean>,
-  definitions: Record<string, SwaggerJson.Schema>,
+  definitions: Record<string, SwaggerJson.Schema> = {},
 ) => {
   const [properties, setProperties] = useState<[string, SwaggerJson.Schema][]>([]);
   const [childSchemas, setChildSchemas] = useState<Record<string, SwaggerJson.Schema>>({});

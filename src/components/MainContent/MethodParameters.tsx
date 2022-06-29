@@ -6,7 +6,7 @@ import { DefinitionDetail } from './DefinitionDetail';
 
 type MethodParametersProps = {
   parameters: SwaggerJson.Parameter[];
-  definitions: Record<string, SwaggerJson.Schema>;
+  definitions?: Record<string, SwaggerJson.Schema>;
 };
 
 export const MethodParameters: React.FC<MethodParametersProps> = ({ parameters, definitions }) => {

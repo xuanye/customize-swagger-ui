@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { MethodSummary } from './MethodSummary';
 import { MethodParameters } from './MethodParameters';
 import { MethodResponse } from './MethodResponse';
@@ -7,12 +7,14 @@ type MethodDescriptionProps = {
   definitions?: Record<string, SwaggerJson.Schema>;
 };
 
-export const MethodDescription: React.FC<MethodDescriptionProps> = ({ method, definitions }) => {
-  return (
-    <>
-      <MethodSummary method={method} />
-      <MethodParameters parameters={method.parameters} definitions={definitions || {}} />
-      <MethodResponse responses={method.responses} definitions={definitions} />
-    </>
-  );
-};
+export const MethodDescription: React.FC<MethodDescriptionProps> = memo(
+  ({ method, definitions }) => {
+    return (
+      <>
+        <MethodSummary method={method} />
+        <MethodParameters parameters={method.parameters} definitions={definitions} />
+        <MethodResponse responses={method.responses} definitions={definitions} />
+      </>
+    );
+  },
+);

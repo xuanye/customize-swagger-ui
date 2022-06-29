@@ -8,6 +8,7 @@ import theme from './theme';
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   return {
+    base: './',
     plugins: [
       react(),
       vitePluginImp({
