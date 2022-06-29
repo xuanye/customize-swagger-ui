@@ -23,6 +23,12 @@ const MyAppShell = () => {
       message.error(error);
     }
   }, [error]);
+
+  useEffect(() => {
+    if (swaggerJson?.info?.title) {
+      document.title = swaggerJson?.info?.title;
+    }
+  }, [swaggerJson]);
   const bodyHeight = document.body.clientHeight - 90;
   const currentMethod = useMemo(() => {
     if (currentId && swaggerJson && swaggerJson.services && swaggerJson.services.length > 0) {
