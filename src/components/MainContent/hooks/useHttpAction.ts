@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { message } from 'antd';
 import qs from 'qs';
 import { http, AxiosRequestConfig } from '@/libs/http';
 import utility from '@/libs/utility';
-import MyStore from '@/libs/store';
-import { CacheKeys } from '@/config/constants';
 
 export const useHttpAction = (method: SwaggerJson.ApiMethod) => {
   const httpAction = useCallback(
@@ -18,7 +16,7 @@ export const useHttpAction = (method: SwaggerJson.ApiMethod) => {
         }
       });
       const path = utility.format(method.path, pathObj);
-      console.log(method.path, pathObj, path);
+
       if (/[\{\}]+/gi.test(path)) {
         return Promise.reject('required parameter is missing');
       }
@@ -42,6 +40,15 @@ export const useHttpAction = (method: SwaggerJson.ApiMethod) => {
       } else {
         data = formValues;
       }
+
+      if (
+        method.operationId == 'ExportMethod' ||
+        (method.produces && method.produces.some(x => x == 'application/octet-stream'))
+      ) {
+        config.responseType = 'blob';
+        console.log('download request');
+      }
+
       config.params = { _t: new Date().getTime() };
 
       switch (method.method.toLowerCase()) {

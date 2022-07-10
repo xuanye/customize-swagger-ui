@@ -41,7 +41,23 @@ const DebugContent: React.FC<DebugContentProps> = ({ method }) => {
       var rsp = await httpAction(formValues as Record<string, any>, requestType);
 
       setStatusCode(rsp.status);
-      setResponse(rsp.data);
+
+      if (rsp.headers['content-type'] == 'application/octet-stream') {
+        const fileName = rsp.headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1');
+        const blob = new Blob([rsp.data]);
+        let dom = document.createElement('a');
+        let url = window.URL.createObjectURL(blob);
+        dom.href = url;
+        dom.download = decodeURI(fileName);
+        dom.style.display = 'none';
+        document.body.append(dom);
+        dom.click();
+        dom.parentNode?.removeChild(dom);
+        window.URL.revokeObjectURL(url);
+        setResponse('Starting download');
+      } else {
+        setResponse(rsp.data);
+      }
 
       //console.log(rsp);
     } catch (e) {

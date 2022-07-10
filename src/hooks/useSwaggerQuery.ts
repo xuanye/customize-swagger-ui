@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useQuery } from './useQuery';
 
 const getSwaggerJson = (path: string) => {
-  console.log('getSwaggerJson');
   return http.get<SwaggerV2.SwaggerV2>(path);
 };
 
@@ -69,7 +68,6 @@ export default function useSwaggerQuery(path: string) {
 
   return {
     isLoading,
-
     error,
     currentId,
     setCurrentId,

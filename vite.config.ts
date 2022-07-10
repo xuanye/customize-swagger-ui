@@ -43,12 +43,12 @@ export default defineConfig(({ command, mode }) => {
       open: true,
       proxy: {
         '/api': {
-          target: 'https://petstore.swagger.io',
+          target: 'http://localhost:5012',
           secure: false,
           changeOrigin: true,
         },
         '/v2': {
-          target: 'https://petstore.swagger.io',
+          target: 'http://localhost:5012',
           secure: false,
           changeOrigin: true,
         },
