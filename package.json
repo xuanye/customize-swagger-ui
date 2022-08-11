@@ -1,0 +1,38 @@
+{
+  "name": "customize-swagger-ui",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.21.3",
+    "axios": "^0.27.2",
+    "qs": "^6.10.5",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-json-view": "^1.21.3",
+    "storejs": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-test-renderer": "^18.0.0",
+    "@vitejs/plugin-react": "^1.3.0",
+    "@vitest/ui": "^0.12.9",
+    "happy-dom": "^4.0.1",
+    "less": "^4.1.3",
+    "prettier": "^2.6.2",
+    "react-test-renderer": "^18.1.0",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.9",
+    "vite-plugin-imp": "^2.1.8",
+    "vitest": "^0.12.9"
+  }
+}
