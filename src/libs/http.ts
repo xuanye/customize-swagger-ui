@@ -39,7 +39,7 @@ class Http {
   initHttp() {
     const http = axios.create({
       baseURL: '/',
-      timeout: 30000,
+      timeout: 300000, //300s
       headers,
       withCredentials: true,
     });
