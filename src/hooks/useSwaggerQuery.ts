@@ -6,7 +6,7 @@ const getSwaggerJson = (path: string) => {
   return http.get<SwaggerV2.SwaggerV2>(path);
 };
 
-export default function useSwaggerQuery(path: string) {
+export default function useSwaggerQuery(path: string, defaultTitle: string) {
   const { isLoading, error, data } = useQuery(() => getSwaggerJson(path));
   const [version, setVersion] = useState<string>('2.0');
   const [info, setInfo] = useState<SwaggerJson.Info>({
@@ -18,6 +18,7 @@ export default function useSwaggerQuery(path: string) {
       email: '',
     },
   });
+  const [title, setTitle] = useState(defaultTitle);
   const [services, setServices] = useState<SwaggerJson.ApiService[]>([]);
 
   const [currentId, setCurrentId] = useState('');
@@ -32,6 +33,10 @@ export default function useSwaggerQuery(path: string) {
 
       setVersion(rspData.swagger);
       setInfo(rspData.info);
+
+      if (!title && rspData?.info?.title) {
+        setTitle(rspData.info.title);
+      }
 
       if (rspData.tags) {
         rspData.tags.map(({ name, description }, index) => {
@@ -77,6 +82,7 @@ export default function useSwaggerQuery(path: string) {
       services,
       definitions,
     },
+    title,
   };
 }
 

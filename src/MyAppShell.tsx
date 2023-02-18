@@ -14,10 +14,16 @@ const SWAGGER_JSON_PATH =
   myWindow.__SwaggerJsonPath__ && myWindow.__SwaggerJsonPath__ != '%(SwaggerJsonPath)'
     ? myWindow.__SwaggerJsonPath__
     : '/v2/swagger.json';
+const SWAGGER_UI_TITLE =
+  myWindow.__SwaggerUITitle__ && myWindow.__SwaggerUITitle__ != '%(DocumentTitle)'
+    ? myWindow.__SwaggerUITitle__
+    : '';
 
 const MyAppShell = () => {
-  const { isLoading, error, swaggerJson, currentId, setCurrentId } =
-    useSwaggerQuery(SWAGGER_JSON_PATH);
+  const { isLoading, error, swaggerJson, currentId, setCurrentId, title } = useSwaggerQuery(
+    SWAGGER_JSON_PATH,
+    SWAGGER_UI_TITLE,
+  );
   useEffect(() => {
     if (error) {
       message.error(error);
@@ -25,10 +31,11 @@ const MyAppShell = () => {
   }, [error]);
 
   useEffect(() => {
-    if (swaggerJson?.info?.title) {
-      document.title = swaggerJson?.info?.title;
+    if (title) {
+      document.title = title;
     }
-  }, [swaggerJson]);
+  }, [title]);
+
   const bodyHeight = document.body.clientHeight - 90;
   const currentMethod = useMemo(() => {
     if (currentId && swaggerJson && swaggerJson.services && swaggerJson.services.length > 0) {
@@ -42,9 +49,7 @@ const MyAppShell = () => {
       <Header className='header'>
         <Space align='baseline'>
           <ApiOutlined style={{ fontSize: 18, color: '#e6fffb' }} />
-          <Typography.Title level={4}>
-            {swaggerJson.info.title || 'Swagger API DOC'}
-          </Typography.Title>
+          <Typography.Title level={4}>{title || 'Swagger API DOC'}</Typography.Title>
           <Tag color='cyan'>{swaggerJson.info.version || '1.0.0'}</Tag>
         </Space>
       </Header>

@@ -43,12 +43,12 @@ export default defineConfig(({ command, mode }) => {
       open: true,
       proxy: {
         '/api': {
-          target: 'https://petstore.swagger.io',
+          target: 'https://localhost:7296',
           secure: false,
           changeOrigin: true,
         },
         '/v2': {
-          target: 'https://petstore.swagger.io',
+          target: 'https://localhost:7296',
           secure: false,
           changeOrigin: true,
         },
@@ -60,7 +60,7 @@ export default defineConfig(({ command, mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            'react-venders': ['react', 'react-dom'],
+            'react-venders': ['react', 'react-dom', '@ant-design/icons'],
           },
         },
       },
